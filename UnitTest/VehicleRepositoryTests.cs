@@ -1,4 +1,5 @@
-﻿using Infrastructure.Memory;
+﻿using Xunit;
+using Infrastructure.Memory;
 using CoreApp.Entities;
 
 public class VehicleRepositoryTests
