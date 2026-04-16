@@ -1,7 +1,9 @@
-﻿namespace CoreApp.Dto;
+﻿using CoreApp.Enums;
+
+namespace CoreApp.Dto;
 
 public record CreateGateDto(
     string Name,
-    string Type,
+    GateType Type,
     string Location
 );

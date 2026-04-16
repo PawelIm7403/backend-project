@@ -2,7 +2,7 @@
 
 namespace CoreApp.Repositories;
 
-public interface IParkingGateServices
+public interface IParkingGateService
 {
     Task<PagedResult<ParkingGateDto>> GetAll(int pageNumber, int pageSize);
     

@@ -28,7 +28,7 @@ public static class ParkingGateMapper
         {
             Id = dto.Id,
             Name = dto.Name,
-            Type = type,
+            Type = Enum.Parse<GateType>(dto.Type),
             Location = dto.Location,
             IsOperational = dto.IsOperational
         };
