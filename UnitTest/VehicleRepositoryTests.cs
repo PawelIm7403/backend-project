@@ -4,11 +4,11 @@ using CoreApp.Entities;
 
 public class VehicleRepositoryTests
 {
-    private readonly InMemoryVehicleRepository _repository;
+    private readonly MemoryVehicleRepository _repository;
 
     public VehicleRepositoryTests()
     {
-        _repository = new InMemoryVehicleRepository();
+        _repository = new MemoryVehicleRepository();
     }
 
     [Fact]
