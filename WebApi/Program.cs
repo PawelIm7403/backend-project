@@ -1,3 +1,4 @@
+using CoreApp.Module;
 using CoreApp.Repositories;
 using Infrastructure.Memory;
 
@@ -8,23 +9,23 @@ public class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
+        builder.Services.AddAuthorization();
+        builder.Services.AddCoreAppModule(builder.Configuration); // Moduł z walidatorami
+        
+        builder.Services.AddControllers(); // kontrolery REST
+        
+        builder.Services.AddOpenApi(); // OpenAPI
 
-        // 🔹 kontrolery REST
-        builder.Services.AddControllers();
-
-        // 🔹 OpenAPI
-        builder.Services.AddOpenApi();
-
-        // 🔹 REPOZYTORIA (Singleton)
+        // REPOZYTORIA (Singleton)
         builder.Services.AddSingleton<IParkingGateRepository, MemoryParkingGateRepository>();
         builder.Services.AddSingleton<IVehicleRepository, MemoryVehicleRepository>();
         builder.Services.AddSingleton<IParkingSessionRepository, MemoryParkingSessionRepository>();
 
-        // 🔹 UnitOfWork
-        builder.Services.AddSingleton<IParkingUnitOfWork, MemoryParkingUnitOfWork>();
+       
+        builder.Services.AddSingleton<IParkingUnitOfWork, MemoryParkingUnitOfWork>(); // UnitOfWork
 
-        // 🔹 Service
-        builder.Services.AddSingleton<IParkingGateService, MemoryParkingGateService>();
+        
+        builder.Services.AddSingleton<IParkingGateService, MemoryParkingGateService>(); // Service
 
         var app = builder.Build();
 

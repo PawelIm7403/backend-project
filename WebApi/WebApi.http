@@ -1,6 +1,29 @@
 @WebApi_HostAddress = http://localhost:5143
 
-GET {{WebApi_HostAddress}}/weatherforecast/
+GET {{WebApi_HostAddress}}/api/gates?page=1&size=10
+
 Accept: application/json
 
 ###
+GET {{WebApi_HostAddress}}/api/gates/<wstaw znany guid>
+Accept: application/json
+
+###
+POST {{WebApi_HostAddress}}/api/gates
+Content-Type: application/json
+
+{
+  "name": "AB",
+  "type": 0,
+  "location" : "Main Gate"
+}
+
+###
+POST {{WebApi_HostAddress}}/api/gates
+Content-Type: application/json
+
+{
+  "name": "AB",
+  "type": "0",
+  "location" : "2-1"
+}

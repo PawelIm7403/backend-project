@@ -1,4 +1,5 @@
 ﻿using CoreApp.Dto;
+using CoreApp.Enums;
 using CoreApp.Mappers;
 using CoreApp.Repositories;
 
@@ -47,7 +48,7 @@ public class MemoryParkingGateService : IParkingGateService
         await _unit.Gates.AddAsync(entity);
         await _unit.SaveChangesAsync();
     }
-
+    
     public async Task UpdateOperationalStatus(Guid id, bool isOperational)
     {
         var entity = await _unit.Gates.FindByIdAsync(id);
