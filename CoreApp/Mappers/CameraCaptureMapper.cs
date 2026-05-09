@@ -1,6 +1,5 @@
 ﻿using CoreApp.Dto;
 using CoreApp.Entities;
-using CoreApp.Enums;
 
 namespace CoreApp.Mappers;
 
@@ -17,17 +16,15 @@ public static class CameraCaptureMapper
         );
     }
 
-    public static CameraCapture ToEntity(this CameraCaptureDto dto)
+    public static CameraCapture ToEntity(this CreateCameraCaptureDto dto)
     {
         return new CameraCapture
         {
             LicensePlate = dto.LicensePlate,
             DetectedBrand = dto.Brand,
             DetectedColor = dto.Color,
-            GateName = dto.GateName,
             ImagePath = dto.ImagePath ?? string.Empty,
-            CapturedAt = DateTime.UtcNow,
-            Type = CaptureType.Entry
+            CapturedAt = DateTime.UtcNow
         };
     }
 }

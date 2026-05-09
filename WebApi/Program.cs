@@ -26,6 +26,7 @@ public class Program
 
         
         builder.Services.AddSingleton<IParkingGateService, MemoryParkingGateService>(); // Service
+        builder.Services.AddSingleton<ICameraCaptureRepository, MemoryCameraCaptureRepository>();
 
         var app = builder.Build();
 

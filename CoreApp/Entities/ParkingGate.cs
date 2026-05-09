@@ -10,4 +10,6 @@ public class ParkingGate : EntityBase
     public bool IsOperational { get; set; }
 
     public ICollection<ParkingSession> ParkingSessions { get; set; }
+
+    public ICollection<CameraCapture> CameraCaptures { get; set; } = new List<CameraCapture>();
 }

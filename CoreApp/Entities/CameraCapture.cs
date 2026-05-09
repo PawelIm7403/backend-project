@@ -2,7 +2,7 @@
 
 namespace CoreApp.Entities;
 
-public class CameraCapture
+public class CameraCapture : EntityBase
 {
     public string GateName { get; set; }
     public string LicensePlate { get; set; }

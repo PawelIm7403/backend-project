@@ -2,6 +2,7 @@
 using CoreApp.Enums;
 using CoreApp.Mappers;
 using CoreApp.Repositories;
+using CoreApp.Entities;
 
 namespace Infrastructure.Memory;
 
@@ -62,5 +63,60 @@ public class MemoryParkingGateService : IParkingGateService
 
         await _unit.Gates.UpdateAsync(entity);
         await _unit.SaveChangesAsync();
+    }
+    
+    public async Task<CameraCaptureDto?> AddCapture(Guid gateId, CreateCameraCaptureDto dto)
+    {
+        var gate = await _unit.Gates.FindByIdAsync(gateId);
+
+        if (gate is null)
+        {
+            return null;
+        }
+
+        var capture = dto.ToEntity();
+
+        capture.Id = Guid.NewGuid();
+        capture.ParkingGateId = gate.Id;
+        capture.ParkingGate = gate;
+        capture.GateName = gate.Name;
+        capture.Type = gate.Type == CoreApp.Enums.GateType.Entry
+            ? CoreApp.Enums.CaptureType.Entry
+            : CoreApp.Enums.CaptureType.Exit;
+
+        gate.CameraCaptures.Add(capture);
+
+        await _unit.CameraCaptures.AddAsync(capture);
+        await _unit.Gates.UpdateAsync(gate);
+        await _unit.SaveChangesAsync();
+
+        return capture.ToDto();
+    }
+    
+    public async Task<PagedResult<CameraCaptureDto>?> GetCaptures(Guid gateId, int page, int pageSize)
+    {
+        var gate = await _unit.Gates.FindByIdAsync(gateId);
+
+        if (gate is null)
+        {
+            return null;
+        }
+
+        var all = await _unit.CameraCaptures.FindByGateIdAsync(gateId);
+
+        var total = all.Count();
+
+        var items = all
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .Select(x => x.ToDto())
+            .ToList();
+
+        return new PagedResult<CameraCaptureDto>(
+            items,
+            total,
+            page,
+            pageSize
+        );
     }
 }
