@@ -44,4 +44,39 @@ public class GatesController : ControllerBase
 
         return CreatedAtAction(nameof(GetGate), new { id = gateDto.Id }, gateDto);
     }
+
+    [HttpPost("{gateId:guid}/captures")]
+    public async Task<IActionResult> AddCameraCapture(
+        [FromRoute] Guid gateId,
+        [FromBody] CreateCameraCaptureDto dto)
+    {
+        var capture = await _service.AddCapture(gateId, dto);
+
+        return CreatedAtAction(
+            nameof(GetCaptures),
+            new { gateId },
+            capture
+        );
+    }
+
+    [HttpGet("{gateId:guid}/captures")]
+    public async Task<IActionResult> GetCaptures(
+        [FromRoute] Guid gateId,
+        int page = 1,
+        int size = 10)
+    {
+        var captures = await _service.GetCaptures(gateId, page, size);
+
+        return Ok(captures);
+    }
+    
+    [HttpDelete("{gateId:guid}/captures/{captureId:guid}")]
+    public async Task<IActionResult> DeleteCameraCapture(
+        [FromRoute] Guid gateId,
+        [FromRoute] Guid captureId)
+    {
+        await _service.DeleteCapture(gateId, captureId);
+
+        return NoContent();
+    }
 }

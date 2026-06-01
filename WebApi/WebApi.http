@@ -5,10 +5,6 @@ GET {{WebApi_HostAddress}}/api/gates?page=1&size=10
 Accept: application/json
 
 ###
-GET {{WebApi_HostAddress}}/api/gates/<wstaw znany guid>
-Accept: application/json
-
-###
 POST {{WebApi_HostAddress}}/api/gates
 Content-Type: application/json
 
@@ -27,3 +23,37 @@ Content-Type: application/json
   "type": "0",
   "location" : "2-1"
 }
+
+###
+POST {{WebApi_HostAddress}}/api/gates/ae21df79-21ea-423d-94bb-2f4eea489e7c/captures
+Content-Type: application/json
+
+{
+  "licensePlate": "KR12345",
+  "brand": "Toyota",
+  "color": "Red",
+  "imagePath": "images/car1.jpg"
+}
+
+###
+GET {{WebApi_HostAddress}}/api/gates/0777363e-c56e-4895-a50a-a9596491c6ad/captures?page=1&size=10
+Accept: application/json
+
+###
+POST {{WebApi_HostAddress}}/api/gates/00000000-0000-0000-0000-000000000000/captures
+Content-Type: application/json
+
+{
+  "licensePlate": "KR12345",
+  "brand": "Toyota",
+  "color": "Red",
+  "imagePath": "images/car1.jpg"
+}
+
+###
+DELETE {{WebApi_HostAddress}}/api/gates/ae21df79-21ea-423d-94bb-2f4eea489e7c/captures/c44c6ca4-8736-4f65-bd7e-e8bb170ba6d8
+Accept: application/json
+
+###
+GET {{WebApi_HostAddress}}/api/gates/ae21df79-21ea-423d-94bb-2f4eea489e7c/captures?page=1&size=10
+Accept: application/json

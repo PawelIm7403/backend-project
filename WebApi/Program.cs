@@ -1,6 +1,7 @@
 using CoreApp.Module;
 using CoreApp.Repositories;
 using Infrastructure.Memory;
+using WebApi.WebApi;
 
 namespace WebApi;
 
@@ -15,6 +16,9 @@ public class Program
         builder.Services.AddControllers(); // kontrolery REST
         
         builder.Services.AddOpenApi(); // OpenAPI
+        
+        builder.Services.AddExceptionHandler<ProblemDetailsExceptionHandler>();
+        builder.Services.AddProblemDetails();
 
         // REPOZYTORIA (Singleton)
         builder.Services.AddSingleton<IParkingGateRepository, MemoryParkingGateRepository>();
@@ -27,6 +31,8 @@ public class Program
         
         builder.Services.AddSingleton<IParkingGateService, MemoryParkingGateService>(); // Service
         builder.Services.AddSingleton<ICameraCaptureRepository, MemoryCameraCaptureRepository>();
+        
+        
 
         var app = builder.Build();
 
@@ -37,6 +43,9 @@ public class Program
 
         app.UseHttpsRedirection();
         app.UseAuthorization();
+        
+        app.UseExceptionHandler();
+        
         app.MapControllers();
         app.Run();
     }

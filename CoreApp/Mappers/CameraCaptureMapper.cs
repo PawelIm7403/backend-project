@@ -8,6 +8,7 @@ public static class CameraCaptureMapper
     public static CameraCaptureDto ToDto(this CameraCapture entity)
     {
         return new CameraCaptureDto(
+            entity.Id,
             entity.LicensePlate,
             entity.DetectedBrand,
             entity.DetectedColor,

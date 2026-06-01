@@ -3,6 +3,7 @@ using CoreApp.Enums;
 using CoreApp.Mappers;
 using CoreApp.Repositories;
 using CoreApp.Entities;
+using CoreApp.Exceptions;
 
 namespace Infrastructure.Memory;
 
@@ -65,13 +66,13 @@ public class MemoryParkingGateService : IParkingGateService
         await _unit.SaveChangesAsync();
     }
     
-    public async Task<CameraCaptureDto?> AddCapture(Guid gateId, CreateCameraCaptureDto dto)
+    public async Task<CameraCaptureDto> AddCapture(Guid gateId, CreateCameraCaptureDto dto)
     {
         var gate = await _unit.Gates.FindByIdAsync(gateId);
 
         if (gate is null)
         {
-            return null;
+            throw new GateNotFoundException($"Gate with id={gateId} not found!");
         }
 
         var capture = dto.ToEntity();
@@ -118,5 +119,29 @@ public class MemoryParkingGateService : IParkingGateService
             page,
             pageSize
         );
+    }
+    
+    public async Task DeleteCapture(Guid gateId, Guid captureId)
+    {
+        var gate = await _unit.Gates.FindByIdAsync(gateId);
+
+        if (gate is null)
+        {
+            throw new GateNotFoundException($"Gate with id={gateId} not found!");
+        }
+
+        var capture = gate.CameraCaptures
+            .FirstOrDefault(x => x.Id == captureId);
+
+        if (capture is null)
+        {
+            throw new Exception($"Camera capture with id={captureId} not found!");
+        }
+
+        gate.CameraCaptures.Remove(capture);
+
+        await _unit.CameraCaptures.RemoveByIdAsync(captureId);
+        await _unit.Gates.UpdateAsync(gate);
+        await _unit.SaveChangesAsync();
     }
 }
