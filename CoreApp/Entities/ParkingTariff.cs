@@ -8,5 +8,5 @@ public class ParkingTariff : EntityBase
     public decimal DailyMaxRate { get; set; }
     public bool IsActive { get; set; }
 
-    public ICollection<ParkingSession> ParkingSessions { get; set; }
+    public ICollection<ParkingSession> ParkingSessions { get; set; } = new List<ParkingSession>();
 }

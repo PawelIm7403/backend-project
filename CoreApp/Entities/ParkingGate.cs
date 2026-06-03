@@ -9,7 +9,7 @@ public class ParkingGate : EntityBase
     public string Location { get; set; }
     public bool IsOperational { get; set; }
 
-    public ICollection<ParkingSession> ParkingSessions { get; set; }
+    public ICollection<ParkingSession> ParkingSessions { get; set; } = new List<ParkingSession>();
 
     public ICollection<CameraCapture> CameraCaptures { get; set; } = new List<CameraCapture>();
 }

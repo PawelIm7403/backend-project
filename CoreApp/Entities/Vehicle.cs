@@ -6,5 +6,5 @@ public class Vehicle : EntityBase
     public string Brand  { get; set; }
     public string Color { get; set; }
     
-    public ICollection<ParkingSession> ParkingSessions { get; set; }
+    public ICollection<ParkingSession> ParkingSessions { get; set; } = new List<ParkingSession>();
 }

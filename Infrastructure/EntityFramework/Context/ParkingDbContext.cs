@@ -76,17 +76,17 @@ public class ParkingDbContext : IdentityDbContext<AppUser, AppRole, string>
             entity.Property(s => s.ParkingFee).HasColumnType("decimal(10,2)");
 
             entity.HasOne(s => s.Vehicle)
-                .WithMany()
+                .WithMany(v => v.ParkingSessions)
                 .HasForeignKey(s => s.VehicleId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             entity.HasOne(s => s.ParkingGate)
-                .WithMany()
+                .WithMany(g => g.ParkingSessions)
                 .HasForeignKey(s => s.ParkingGateId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             entity.HasOne(s => s.ParkingTariff)
-                .WithMany()
+                .WithMany(t => t.ParkingSessions)
                 .HasForeignKey(s => s.ParkingTariffId)
                 .OnDelete(DeleteBehavior.Restrict);
         });
@@ -104,83 +104,5 @@ public class ParkingDbContext : IdentityDbContext<AppUser, AppRole, string>
                 .WithMany(g => g.CameraCaptures)
                 .HasForeignKey(c => c.ParkingGateId);
         });
-
-        var adminRoleId = "11111111-1111-1111-1111-111111111111";
-        var registeredRoleId = "22222222-2222-2222-2222-222222222222";
-        var anonymousRoleId = "33333333-3333-3333-3333-333333333333";
-
-        builder.Entity<AppRole>().HasData(
-            new AppRole(UserRole.Administrator.ToString(), "System administrator")
-            {
-                Id = adminRoleId,
-                NormalizedName = UserRole.Administrator.ToString().ToUpper()
-            },
-            new AppRole(UserRole.RegisteredUser.ToString(), "Registered parking user")
-            {
-                Id = registeredRoleId,
-                NormalizedName = UserRole.RegisteredUser.ToString().ToUpper()
-            },
-            new AppRole(UserRole.AnonymousUser.ToString(), "Anonymous parking user")
-            {
-                Id = anonymousRoleId,
-                NormalizedName = UserRole.AnonymousUser.ToString().ToUpper()
-            }
-        );
-
-        var adminUserId = "44444444-4444-4444-4444-444444444444";
-        var userId = "55555555-5555-5555-5555-555555555555";
-
-        var passwordHasher = new PasswordHasher<AppUser>();
-
-        var admin = new AppUser
-        {
-            Id = adminUserId,
-            UserName = "admin@parking.local",
-            NormalizedUserName = "ADMIN@PARKING.LOCAL",
-            Email = "admin@parking.local",
-            NormalizedEmail = "ADMIN@PARKING.LOCAL",
-            EmailConfirmed = true,
-            FirstName = "Admin",
-            LastName = "Parking",
-            FullName = "Admin Parking",
-            Department = "Administration",
-            Status = SystemUserStatus.Active,
-            CreatedAt = new DateTime(2026, 1, 1)
-        };
-
-        admin.PasswordHash = passwordHasher.HashPassword(admin, "Admin123!");
-
-        var user = new AppUser
-        {
-            Id = userId,
-            UserName = "user@parking.local",
-            NormalizedUserName = "USER@PARKING.LOCAL",
-            Email = "user@parking.local",
-            NormalizedEmail = "USER@PARKING.LOCAL",
-            EmailConfirmed = true,
-            FirstName = "Jan",
-            LastName = "Kowalski",
-            FullName = "Jan Kowalski",
-            Department = "Parking",
-            Status = SystemUserStatus.Active,
-            CreatedAt = new DateTime(2026, 1, 1)
-        };
-
-        user.PasswordHash = passwordHasher.HashPassword(user, "User123!");
-
-        builder.Entity<AppUser>().HasData(admin, user);
-
-        builder.Entity<IdentityUserRole<string>>().HasData(
-            new IdentityUserRole<string>
-            {
-                UserId = adminUserId,
-                RoleId = adminRoleId
-            },
-            new IdentityUserRole<string>
-            {
-                UserId = userId,
-                RoleId = registeredRoleId
-            }
-        );
     }
 }
