@@ -5,13 +5,13 @@ using CoreApp.Repositories;
 using CoreApp.Entities;
 using CoreApp.Exceptions;
 
-namespace Infrastructure.Memory;
+namespace CoreApp.Services;
 
-public class MemoryParkingGateService : IParkingGateService
+public class ParkingGateService : IParkingGateService
 {
     private readonly IParkingUnitOfWork _unit;
 
-    public MemoryParkingGateService(IParkingUnitOfWork unit)
+    public ParkingGateService(IParkingUnitOfWork unit)
     {
         _unit = unit;
     }
