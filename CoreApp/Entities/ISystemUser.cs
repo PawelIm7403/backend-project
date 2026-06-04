@@ -5,7 +5,7 @@ namespace CoreApp.Entities;
 public interface ISystemUser
 {
     string Id { get; }
-    string Email { get; }
+    string? Email { get; }
     string FirstName { get; }
     string LastName { get; }
     string FullName { get; }

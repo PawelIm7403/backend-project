@@ -9,6 +9,13 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Infrastructure.Security;
+using CoreApp.Authorization;
+using CoreApp.Enums;
+using Infrastructure.EntityFramework.Seeders;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Infrastructure.EntityFramework;
 
@@ -42,8 +49,15 @@ public static class ParkingInfrastructureModule
         services.AddScoped<IParkingUnitOfWork, EfParkingUnitOfWork>();
 
         services.AddScoped<IParkingGateService, ParkingGateService>();
+        
+        services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<JwtSettings>();
+        
+        services.AddScoped<IDataSeeder, IdentityDbSeeder>();
+        services.AddScoped<IDataSeeder, ParkingDbSeeder>();
 
         return services;
+        
     }
 
     public static IServiceCollection AddParkingMemoryModule(
@@ -57,6 +71,54 @@ public static class ParkingInfrastructureModule
         services.AddSingleton<IParkingUnitOfWork, MemoryParkingUnitOfWork>();
 
         services.AddSingleton<IParkingGateService, ParkingGateService>();
+
+        return services;
+    }
+    
+    public static IServiceCollection AddJwt(
+        this IServiceCollection services,
+        JwtSettings jwtOptions)
+    {
+        services
+            .AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = jwtOptions.Issuer,
+                    ValidAudience = jwtOptions.Audience,
+                    IssuerSigningKey = jwtOptions.GetSymmetricKey(),
+                    ClockSkew = TimeSpan.Zero
+                };
+            });
+
+        services.AddAuthorization(options =>
+        {
+            options.AddPolicy(AppPolicies.AdminOnly.ToString(), policy =>
+                policy.RequireRole(UserRole.Administrator.ToString()));
+
+            options.AddPolicy(AppPolicies.RegisteredUserOnly.ToString(), policy =>
+                policy.RequireRole(UserRole.RegisteredUser.ToString()));
+
+            options.AddPolicy(AppPolicies.AnonymousUserOnly.ToString(), policy =>
+                policy.RequireRole(UserRole.AnonymousUser.ToString()));
+
+            options.DefaultPolicy = new AuthorizationPolicyBuilder()
+                .RequireAuthenticatedUser()
+                .Build();
+
+            options.FallbackPolicy = new AuthorizationPolicyBuilder()
+                .RequireAuthenticatedUser()
+                .Build();
+        });
 
         return services;
     }

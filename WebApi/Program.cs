@@ -4,12 +4,14 @@ using CoreApp.Services;
 using Infrastructure.Memory;
 using WebApi.WebApi;
 using Infrastructure.EntityFramework;
+using Infrastructure.Security;
+using Infrastructure.EntityFramework.Seeders;
 
 namespace WebApi;
 
 public class Program
 {
-    public static void Main(string[] args)
+    public static async Task Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
         builder.Services.AddAuthorization();
@@ -22,6 +24,9 @@ public class Program
        //(Pamięć) builder.Services.AddParkingMemoryModule();
         builder.Services.AddParkingEfModule(builder.Configuration); //(EF)
         builder.Services.AddCoreAppModule(builder.Configuration);
+        
+        builder.Services.AddSingleton<JwtSettings>();
+        builder.Services.AddJwt(new JwtSettings(builder.Configuration));
         
         builder.Services.AddExceptionHandler<ProblemDetailsExceptionHandler>();
         builder.Services.AddProblemDetails();
@@ -47,9 +52,22 @@ public class Program
         if (app.Environment.IsDevelopment())
         {
             app.MapOpenApi();
+
+            using var scope = app.Services.CreateScope();
+
+            var seeders = scope.ServiceProvider
+                .GetServices<IDataSeeder>()
+                .OrderBy(seeder => seeder.Order);
+
+            foreach (var seeder in seeders)
+            {
+                await seeder.SeedAsync();
+            }
         }
 
         app.UseHttpsRedirection();
+        
+        app.UseAuthentication();
         app.UseAuthorization();
         
         app.UseExceptionHandler();

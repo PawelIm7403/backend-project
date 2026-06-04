@@ -10,7 +10,7 @@ public class AppUser : IdentityUser, ISystemUser
     public required string LastName { get; set; }
     public required string FullName { get; set; }
 
-    public override required string Email { get; set; }
+    public override string? Email { get; set; }
 
     public required string Department { get; set; }
 

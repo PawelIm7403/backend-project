@@ -4,6 +4,7 @@ using Infrastructure.EntityFramework.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Infrastructure.Security;
 
 namespace Infrastructure.EntityFramework.Context;
 
@@ -14,6 +15,8 @@ public class ParkingDbContext : IdentityDbContext<AppUser, AppRole, string>
     public DbSet<ParkingSession> ParkingSessions { get; set; }
     public DbSet<ParkingTariff> ParkingTariffs { get; set; }
     public DbSet<CameraCapture> CameraCaptures { get; set; }
+    
+    public DbSet<RefreshToken> RefreshTokens { get; set; }
 
     public ParkingDbContext()
     {

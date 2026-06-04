@@ -2,6 +2,8 @@
 using CoreApp.Mappers;
 using CoreApp.Repositories;
 using Microsoft.AspNetCore.Mvc;
+using CoreApp.Authorization;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApi.Controllers;
 
@@ -16,7 +18,9 @@ public class GatesController : ControllerBase
         _service = service;
     }
 
+    
     [HttpGet]
+    [Authorize(Policy = nameof(AppPolicies.AdminOnly))]
     public async Task<IActionResult> GetAllGates(int page = 1, int size = 10)
     {
         return Ok(await _service.GetAll(page, size));
