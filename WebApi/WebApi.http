@@ -1,126 +1,26 @@
 @WebApi_HostAddress = http://localhost:5143
+@LicensePlate = KR12345
+@DriverToken = TU_WKLEJ_ACCESS_TOKEN_KIEROWCY_Z_ODPOWIEDZI_LOGIN
+@AdminToken = TU_WKLEJ_ACCESS_TOKEN_ADMINA_Z_ODPOWIEDZI_LOGIN
 
-GET {{WebApi_HostAddress}}/api/gates?page=1&size=10
+# ============================================================
+# JAK KORZYSTAC Z TEGO PLIKU
+# ============================================================
+# 1. Uruchomić WebApi na http://localhost:5143.
+# 2. Wykonać login kierowcy i skopiuj accessToken do zmiennej DriverToken.
+# 3. Dla endpointow z [AUTH] wymagany jest naglowek Authorization.
+# 4. Testowa tablica rejestracyjna z seedera: KR12345.
+# 5. Publiczna platnosc oznacza sesje jako oplacona bez konta kierowcy.
+#    Do testu salda uzywać sekcji "Platnosci i konto kierowcy".
 
-Accept: application/json
 
-###
-POST {{WebApi_HostAddress}}/api/gates
-Content-Type: application/json
-
-{
-  "name": "AB",
-  "type": 0,
-  "location" : "Main Gate"
-}
-
-###
-POST {{WebApi_HostAddress}}/api/gates
-Content-Type: application/json
-
-{
-  "name": "AB",
-  "type": "0",
-  "location" : "2-1"
-}
+# ============================================================
+# 0. AUTORYZACJA
+# ============================================================
 
 ###
-POST {{WebApi_HostAddress}}/api/gates/ae21df79-21ea-423d-94bb-2f4eea489e7c/captures
-Content-Type: application/json
-
-{
-  "licensePlate": "KR12345",
-  "brand": "Toyota",
-  "color": "Red",
-  "imagePath": "images/car1.jpg"
-}
-
-###
-GET {{WebApi_HostAddress}}/api/gates/0777363e-c56e-4895-a50a-a9596491c6ad/captures?page=1&size=10
-Accept: application/json
-
-###
-POST {{WebApi_HostAddress}}/api/gates/00000000-0000-0000-0000-000000000000/captures
-Content-Type: application/json
-
-{
-  "licensePlate": "KR12345",
-  "brand": "Toyota",
-  "color": "Red",
-  "imagePath": "images/car1.jpg"
-}
-
-###
-DELETE {{WebApi_HostAddress}}/api/gates/ae21df79-21ea-423d-94bb-2f4eea489e7c/captures/c44c6ca4-8736-4f65-bd7e-e8bb170ba6d8
-Accept: application/json
-
-###
-GET {{WebApi_HostAddress}}/api/gates/ae21df79-21ea-423d-94bb-2f4eea489e7c/captures?page=1&size=10
-Accept: application/json
-
-
-###
-GET {{WebApi_HostAddress}}/api/auth/me
-Accept: application/json
-
-###
-POST {{WebApi_HostAddress}}/api/auth/login
-Content-Type: application/json
-
-{
-  "email": "admin@parking.local",
-  "password": "Admin@123!"
-}
-
-###
-GET {{WebApi_HostAddress}}/api/auth/me
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IkY1QkFERTE0LTZDQzgtNDJBMi05QTQ0LTk4NDJEQTJEOTI4MCIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2VtYWlsYWRkcmVzcyI6ImFkbWluQHBhcmtpbmcubG9jYWwiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9naXZlbm5hbWUiOiJBZGFtIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvc3VybmFtZSI6IkFkbWluaXN0cmF0b3IiLCJkZXBhcnRtZW50IjoiSVQiLCJqdGkiOiIxOWFlODY2YS00MTNjLTQ0ZTYtODA0ZS1hNTQ1NWI1MDU1NTUiLCJpYXQiOiIxNzgwNTg5MDc1IiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQWRtaW5pc3RyYXRvciIsIm5iZiI6MTc4MDU4OTA3NSwiZXhwIjoxNzgwNTkyNjc1LCJpc3MiOiJQYXJraW5nQXBpQXBwIiwiYXVkIjoiUGFya2luZ0NsaWVudCJ9.QfJKKc7acG0TLYAQ6918x1OTWlhpKjKqYAlf990pPoM
-Accept: application/json
-
-###
-POST {{WebApi_HostAddress}}/api/auth/refresh
-Content-Type: application/json
-
-{
-  "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IkY1QkFERTE0LTZDQzgtNDJBMi05QTQ0LTk4NDJEQTJEOTI4MCIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2VtYWlsYWRkcmVzcyI6ImFkbWluQHBhcmtpbmcubG9jYWwiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9naXZlbm5hbWUiOiJBZGFtIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvc3VybmFtZSI6IkFkbWluaXN0cmF0b3IiLCJkZXBhcnRtZW50IjoiSVQiLCJqdGkiOiIxOWFlODY2YS00MTNjLTQ0ZTYtODA0ZS1hNTQ1NWI1MDU1NTUiLCJpYXQiOiIxNzgwNTg5MDc1IiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQWRtaW5pc3RyYXRvciIsIm5iZiI6MTc4MDU4OTA3NSwiZXhwIjoxNzgwNTkyNjc1LCJpc3MiOiJQYXJraW5nQXBpQXBwIiwiYXVkIjoiUGFya2luZ0NsaWVudCJ9.QfJKKc7acG0TLYAQ6918x1OTWlhpKjKqYAlf990pPoM",
-  "refreshToken": "oh8GWLyN3HDUvWxWUwrK95OyAPQ0Yvc+T/ISb+1L6ClO5Qq8R+Me91rUQCNnTmT3ea4C8kldEzJvHjruFr9KZg=="
-}
-
-###
-POST {{WebApi_HostAddress}}/api/auth/revoke
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IkY1QkFERTE0LTZDQzgtNDJBMi05QTQ0LTk4NDJEQTJEOTI4MCIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2VtYWlsYWRkcmVzcyI6ImFkbWluQHBhcmtpbmcubG9jYWwiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9naXZlbm5hbWUiOiJBZGFtIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvc3VybmFtZSI6IkFkbWluaXN0cmF0b3IiLCJkZXBhcnRtZW50IjoiSVQiLCJqdGkiOiI5YTg5NDZjNi00MGQ0LTRmZDUtODhmNC01NTJhMDVhYjViYzciLCJpYXQiOiIxNzgwNTg5MzkwIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQWRtaW5pc3RyYXRvciIsIm5iZiI6MTc4MDU4OTM5MCwiZXhwIjoxNzgwNTkyOTkwLCJpc3MiOiJQYXJraW5nQXBpQXBwIiwiYXVkIjoiUGFya2luZ0NsaWVudCJ9.9mlB_Y7e-FO6bQ9ohSiqdA2x5GvVkkzPpt7EA_E4rtY
-Content-Type: application/json
-
-"RNrZyWbMgyQlrxfvsmk59BhuDYwDL0uNrm4dpOJvWOpOHHNzxTBjYFzcDXLAvcEgll4VlNouUkr805pksB2tNw=="
-
-###
-GET {{WebApi_HostAddress}}/api/gates?page=1&size=10
-Accept: application/json
-
-###
-POST {{WebApi_HostAddress}}/api/auth/login
-Content-Type: application/json
-
-{
-  "email": "admin@parking.local",
-  "password": "Admin@123!"
-}
-
-###
-GET {{WebApi_HostAddress}}/api/gates?page=1&size=10
-Accept: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IkY1QkFERTE0LTZDQzgtNDJBMi05QTQ0LTk4NDJEQTJEOTI4MCIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2VtYWlsYWRkcmVzcyI6ImFkbWluQHBhcmtpbmcubG9jYWwiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9naXZlbm5hbWUiOiJBZGFtIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvc3VybmFtZSI6IkFkbWluaXN0cmF0b3IiLCJkZXBhcnRtZW50IjoiSVQiLCJqdGkiOiIxODVjNDc3Yy1iODViLTRkOGItOWI3Yi02OGE4NWY2NzU0ZWMiLCJpYXQiOiIxNzgwNTg5ODEwIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQWRtaW5pc3RyYXRvciIsIm5iZiI6MTc4MDU4OTgxMCwiZXhwIjoxNzgwNTkzNDEwLCJpc3MiOiJQYXJraW5nQXBpQXBwIiwiYXVkIjoiUGFya2luZ0NsaWVudCJ9.IDa0kUfRxzBjcs-vggW_aKVHN5z1YpFiM-C2hzj1mvw
-
-###
-GET {{WebApi_HostAddress}}/api/gates?page=1&size=10
-Accept: application/json
-Authorization: Bearer abc
-
-
-
-
- 
-###
+# Login zarejestrowanego kierowcy.
+# Po wykonaniu skopiuj accessToken do DriverToken na gorze pliku.
 POST {{WebApi_HostAddress}}/api/auth/login
 Content-Type: application/json
 
@@ -130,91 +30,225 @@ Content-Type: application/json
 }
 
 ###
-POST {{WebApi_HostAddress}}/api/drivers/vehicles
+# Login administratora.
+# Potrzebne tylko do sekcji pomocniczej "Admin / bramki".
+POST {{WebApi_HostAddress}}/api/auth/login
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjkzQTdGRkRELTA1N0YtNDAyMS05QzY4LUZFMDY5NTFGRkE2NSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2VtYWlsYWRkcmVzcyI6Imphbi5rb3dhbHNraUBwYXJraW5nLmxvY2FsIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvZ2l2ZW5uYW1lIjoiSmFuIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvc3VybmFtZSI6Iktvd2Fsc2tpIiwiZGVwYXJ0bWVudCI6IlBhcmtpbmciLCJqdGkiOiJkNmE1YzUxNi1jNWRlLTRmOGYtOTI1OC04MTY5NWI4MGNiMGMiLCJpYXQiOiIxNzgwNjkxODY2IiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiUmVnaXN0ZXJlZFVzZXIiLCJuYmYiOjE3ODA2OTE4NjYsImV4cCI6MTc4MDY5NTQ2NiwiaXNzIjoiUGFya2luZ0FwaUFwcCIsImF1ZCI6IlBhcmtpbmdDbGllbnQifQ.6F7ykY7s4Aj6mNHx8NfbyZmPiTNEWOCzYvqMPWvKdVE
 
 {
-  "licensePlate": "KR12345",
+  "email": "admin@parking.local",
+  "password": "Admin@123!"
+}
+
+###
+# [AUTH] Sprawdzenie aktualnie zalogowanego uzytkownika.
+GET {{WebApi_HostAddress}}/api/auth/me
+Accept: application/json
+Authorization: Bearer {{DriverToken}}
+
+###
+# Odswiezenie tokenu.
+# Wklej accessToken i refreshToken z odpowiedzi logowania/refresh.
+POST {{WebApi_HostAddress}}/api/auth/refresh
+Content-Type: application/json
+
+{
+  "accessToken": "TU_WKLEJ_ACCESS_TOKEN",
+  "refreshToken": "TU_WKLEJ_REFRESH_TOKEN"
+}
+
+###
+# [AUTH] Uniewaznienie refresh tokenu.
+POST {{WebApi_HostAddress}}/api/auth/revoke
+Content-Type: application/json
+Authorization: Bearer {{DriverToken}}
+
+"TU_WKLEJ_REFRESH_TOKEN"
+
+
+###
+# Historia sesji pojazdu po numerze rejestracyjnym.
+GET {{WebApi_HostAddress}}/api/public/vehicles/{{LicensePlate}}/sessions
+Accept: application/json
+
+###
+# Aktualna aktywna sesja pojazdu po numerze rejestracyjnym.
+GET {{WebApi_HostAddress}}/api/public/vehicles/{{LicensePlate}}/current-session
+Accept: application/json
+
+###
+# Platnosc anonimowa za aktualna sesje.
+# Uwaga: oznacza sesje jako oplacona, ale nie korzysta z salda konta kierowcy.
+POST {{WebApi_HostAddress}}/api/public/vehicles/{{LicensePlate}}/pay-current-session
+Accept: application/json
+
+
+# ============================================================
+# 2. ZAREJESTROWANI KIEROWCY - POJAZDY
+# ============================================================
+# Wszystkie endpointy w tej sekcji wymagaja DriverToken.
+
+###
+# [AUTH] Rejestracja pojazdu kierowcy.
+# Wymagane: numer rejestracyjny i marka.
+POST {{WebApi_HostAddress}}/api/drivers/vehicles
+Content-Type: application/json
+Authorization: Bearer {{DriverToken}}
+
+{
+  "licensePlate": "{{LicensePlate}}",
   "brand": "BMW"
 }
 
 ###
+# [AUTH] Lista pojazdow zalogowanego kierowcy.
 GET {{WebApi_HostAddress}}/api/drivers/vehicles
 Accept: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjkzQTdGRkRELTA1N0YtNDAyMS05QzY4LUZFMDY5NTFGRkE2NSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2VtYWlsYWRkcmVzcyI6Imphbi5rb3dhbHNraUBwYXJraW5nLmxvY2FsIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvZ2l2ZW5uYW1lIjoiSmFuIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvc3VybmFtZSI6Iktvd2Fsc2tpIiwiZGVwYXJ0bWVudCI6IlBhcmtpbmciLCJqdGkiOiJkNmE1YzUxNi1jNWRlLTRmOGYtOTI1OC04MTY5NWI4MGNiMGMiLCJpYXQiOiIxNzgwNjkxODY2IiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiUmVnaXN0ZXJlZFVzZXIiLCJuYmYiOjE3ODA2OTE4NjYsImV4cCI6MTc4MDY5NTQ2NiwiaXNzIjoiUGFya2luZ0FwaUFwcCIsImF1ZCI6IlBhcmtpbmdDbGllbnQifQ.6F7ykY7s4Aj6mNHx8NfbyZmPiTNEWOCzYvqMPWvKdVE
+Authorization: Bearer {{DriverToken}}
+
+
+# ============================================================
+# 3. ZAREJESTROWANI KIEROWCY - SESJE POJAZDOW
+# ============================================================
 
 ###
-GET {{WebApi_HostAddress}}/api/drivers/vehicles/KR12345/sessions
+# [AUTH] Historia sesji konkretnego pojazdu kierowcy.
+# Kierowca moze przegladac tylko swoje pojazdy.
+GET {{WebApi_HostAddress}}/api/drivers/vehicles/{{LicensePlate}}/sessions
 Accept: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjkzQTdGRkRELTA1N0YtNDAyMS05QzY4LUZFMDY5NTFGRkE2NSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2VtYWlsYWRkcmVzcyI6Imphbi5rb3dhbHNraUBwYXJraW5nLmxvY2FsIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvZ2l2ZW5uYW1lIjoiSmFuIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvc3VybmFtZSI6Iktvd2Fsc2tpIiwiZGVwYXJ0bWVudCI6IlBhcmtpbmciLCJqdGkiOiJkNmE1YzUxNi1jNWRlLTRmOGYtOTI1OC04MTY5NWI4MGNiMGMiLCJpYXQiOiIxNzgwNjkxODY2IiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiUmVnaXN0ZXJlZFVzZXIiLCJuYmYiOjE3ODA2OTE4NjYsImV4cCI6MTc4MDY5NTQ2NiwiaXNzIjoiUGFya2luZ0FwaUFwcCIsImF1ZCI6IlBhcmtpbmdDbGllbnQifQ.6F7ykY7s4Aj6mNHx8NfbyZmPiTNEWOCzYvqMPWvKdVE
+Authorization: Bearer {{DriverToken}}
 
 ###
-GET {{WebApi_HostAddress}}/api/drivers/vehicles/KR12345/current-session
+# [AUTH] Aktualna sesja konkretnego pojazdu kierowcy.
+GET {{WebApi_HostAddress}}/api/drivers/vehicles/{{LicensePlate}}/current-session
 Accept: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjkzQTdGRkRELTA1N0YtNDAyMS05QzY4LUZFMDY5NTFGRkE2NSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2VtYWlsYWRkcmVzcyI6Imphbi5rb3dhbHNraUBwYXJraW5nLmxvY2FsIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvZ2l2ZW5uYW1lIjoiSmFuIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvc3VybmFtZSI6Iktvd2Fsc2tpIiwiZGVwYXJ0bWVudCI6IlBhcmtpbmciLCJqdGkiOiJkNmE1YzUxNi1jNWRlLTRmOGYtOTI1OC04MTY5NWI4MGNiMGMiLCJpYXQiOiIxNzgwNjkxODY2IiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiUmVnaXN0ZXJlZFVzZXIiLCJuYmYiOjE3ODA2OTE4NjYsImV4cCI6MTc4MDY5NTQ2NiwiaXNzIjoiUGFya2luZ0FwaUFwcCIsImF1ZCI6IlBhcmtpbmdDbGllbnQifQ.6F7ykY7s4Aj6mNHx8NfbyZmPiTNEWOCzYvqMPWvKdVE
+Authorization: Bearer {{DriverToken}}
 
 
-
-
+# ============================================================
+# 4. ZAREJESTROWANI KIEROWCY - RABATY
+# ============================================================
+# Rabaty trzeba aktywowac recznie.
+# RegistrationBonus: dodatkowe 60 minut darmowego parkowania, aktywny 30 dni.
+# LoyaltyDiscount: obnizka ceny po przekroczeniu 100 sesji, aktywny 30 dni.
 
 ###
-GET {{WebApi_HostAddress}}/api/public/vehicles/KR12345/sessions
+# [AUTH] Lista rabatow kierowcy.
+GET {{WebApi_HostAddress}}/api/drivers/discounts
 Accept: application/json
+Authorization: Bearer {{DriverToken}}
 
 ###
-GET {{WebApi_HostAddress}}/api/public/vehicles/KR12345/current-session
+# [AUTH] Aktywacja rabatu za rejestracje.
+POST {{WebApi_HostAddress}}/api/drivers/discounts/activate-registration
 Accept: application/json
+Authorization: Bearer {{DriverToken}}
 
 ###
-# Public payment: marks the session as paid without using driver balance.
-POST {{WebApi_HostAddress}}/api/public/vehicles/KR12345/pay-current-session
+# [AUTH] Aktywacja rabatu lojalnosciowego.
+# Wymaga co najmniej 100 sesji parkowania kierowcy.
+POST {{WebApi_HostAddress}}/api/drivers/discounts/activate-loyalty
 Accept: application/json
+Authorization: Bearer {{DriverToken}}
+
+
+# ============================================================
+# 5. ZAREJESTROWANI KIEROWCY - KONTO I PLATNOSCI
+# ============================================================
+# Konto mozna zasilic z wyprzedzeniem i potem placic z salda.
+# Jesli RegistrationBonus obejmuje aktualna sesje, platnosc powinna byc darmowa
+# i zwrocic amount = 0 bez zmniejszania salda.
 
 ###
-# Driver payment: charges driver account balance. Run account/topup first.
-POST {{WebApi_HostAddress}}/api/drivers/vehicles/KR12345/pay-current-session
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjkzQTdGRkRELTA1N0YtNDAyMS05QzY4LUZFMDY5NTFGRkE2NSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2VtYWlsYWRkcmVzcyI6Imphbi5rb3dhbHNraUBwYXJraW5nLmxvY2FsIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvZ2l2ZW5uYW1lIjoiSmFuIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvc3VybmFtZSI6Iktvd2Fsc2tpIiwiZGVwYXJ0bWVudCI6IlBhcmtpbmciLCJqdGkiOiIxOTY0ODNiOS0xNDAwLTQ2MDItODZlNC05NTc4MWNiODM3ZTIiLCJpYXQiOiIxNzgwNjc2MTkzIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiUmVnaXN0ZXJlZFVzZXIiLCJuYmYiOjE3ODA2NzYxOTMsImV4cCI6MTc4MDY3OTc5MywiaXNzIjoiUGFya2luZ0FwaUFwcCIsImF1ZCI6IlBhcmtpbmdDbGllbnQifQ.zcLEoET2LHKheRBJC1utiMPNAzwVOabFVRFoTgKxKYI
-Accept: application/json
-
-
-
-###
+# [AUTH] Odczyt salda konta kierowcy.
 GET {{WebApi_HostAddress}}/api/drivers/account
 Accept: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjkzQTdGRkRELTA1N0YtNDAyMS05QzY4LUZFMDY5NTFGRkE2NSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2VtYWlsYWRkcmVzcyI6Imphbi5rb3dhbHNraUBwYXJraW5nLmxvY2FsIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvZ2l2ZW5uYW1lIjoiSmFuIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvc3VybmFtZSI6Iktvd2Fsc2tpIiwiZGVwYXJ0bWVudCI6IlBhcmtpbmciLCJqdGkiOiJkNmE1YzUxNi1jNWRlLTRmOGYtOTI1OC04MTY5NWI4MGNiMGMiLCJpYXQiOiIxNzgwNjkxODY2IiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiUmVnaXN0ZXJlZFVzZXIiLCJuYmYiOjE3ODA2OTE4NjYsImV4cCI6MTc4MDY5NTQ2NiwiaXNzIjoiUGFya2luZ0FwaUFwcCIsImF1ZCI6IlBhcmtpbmdDbGllbnQifQ.6F7ykY7s4Aj6mNHx8NfbyZmPiTNEWOCzYvqMPWvKdVE
+Authorization: Bearer {{DriverToken}}
 
 ###
+# [AUTH] Doladowanie konta kierowcy.
 POST {{WebApi_HostAddress}}/api/drivers/account/topup
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjkzQTdGRkRELTA1N0YtNDAyMS05QzY4LUZFMDY5NTFGRkE2NSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2VtYWlsYWRkcmVzcyI6Imphbi5rb3dhbHNraUBwYXJraW5nLmxvY2FsIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvZ2l2ZW5uYW1lIjoiSmFuIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvc3VybmFtZSI6Iktvd2Fsc2tpIiwiZGVwYXJ0bWVudCI6IlBhcmtpbmciLCJqdGkiOiJkNmE1YzUxNi1jNWRlLTRmOGYtOTI1OC04MTY5NWI4MGNiMGMiLCJpYXQiOiIxNzgwNjkxODY2IiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiUmVnaXN0ZXJlZFVzZXIiLCJuYmYiOjE3ODA2OTE4NjYsImV4cCI6MTc4MDY5NTQ2NiwiaXNzIjoiUGFya2luZ0FwaUFwcCIsImF1ZCI6IlBhcmtpbmdDbGllbnQifQ.6F7ykY7s4Aj6mNHx8NfbyZmPiTNEWOCzYvqMPWvKdVE
+Authorization: Bearer {{DriverToken}}
 
 {
   "amount": 50
 }
 
 ###
-POST {{WebApi_HostAddress}}/api/drivers/vehicles/KR12345/pay-from-account
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjkzQTdGRkRELTA1N0YtNDAyMS05QzY4LUZFMDY5NTFGRkE2NSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2VtYWlsYWRkcmVzcyI6Imphbi5rb3dhbHNraUBwYXJraW5nLmxvY2FsIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvZ2l2ZW5uYW1lIjoiSmFuIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvc3VybmFtZSI6Iktvd2Fsc2tpIiwiZGVwYXJ0bWVudCI6IlBhcmtpbmciLCJqdGkiOiJkNmE1YzUxNi1jNWRlLTRmOGYtOTI1OC04MTY5NWI4MGNiMGMiLCJpYXQiOiIxNzgwNjkxODY2IiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiUmVnaXN0ZXJlZFVzZXIiLCJuYmYiOjE3ODA2OTE4NjYsImV4cCI6MTc4MDY5NTQ2NiwiaXNzIjoiUGFya2luZ0FwaUFwcCIsImF1ZCI6IlBhcmtpbmdDbGllbnQifQ.6F7ykY7s4Aj6mNHx8NfbyZmPiTNEWOCzYvqMPWvKdVE
+# [AUTH] Platnosc za aktualna sesje pojazdu z konta kierowcy.
+# To jest glowny endpoint do sprawdzania pobierania z salda i rabatow.
+POST {{WebApi_HostAddress}}/api/drivers/vehicles/{{LicensePlate}}/pay-current-session
 Accept: application/json
-
-
-#discounts
+Authorization: Bearer {{DriverToken}}
 
 ###
-#lista zniżek
-GET {{WebApi_HostAddress}}/api/drivers/discounts
+# Dziala tak samo jak pay-current-session dla zarejestrowanego kierowcy.
+POST {{WebApi_HostAddress}}/api/drivers/vehicles/{{LicensePlate}}/pay-from-account
 Accept: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjkzQTdGRkRELTA1N0YtNDAyMS05QzY4LUZFMDY5NTFGRkE2NSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2VtYWlsYWRkcmVzcyI6Imphbi5rb3dhbHNraUBwYXJraW5nLmxvY2FsIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvZ2l2ZW5uYW1lIjoiSmFuIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvc3VybmFtZSI6Iktvd2Fsc2tpIiwiZGVwYXJ0bWVudCI6IlBhcmtpbmciLCJqdGkiOiJkNmE1YzUxNi1jNWRlLTRmOGYtOTI1OC04MTY5NWI4MGNiMGMiLCJpYXQiOiIxNzgwNjkxODY2IiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiUmVnaXN0ZXJlZFVzZXIiLCJuYmYiOjE3ODA2OTE4NjYsImV4cCI6MTc4MDY5NTQ2NiwiaXNzIjoiUGFya2luZ0FwaUFwcCIsImF1ZCI6IlBhcmtpbmdDbGllbnQifQ.6F7ykY7s4Aj6mNHx8NfbyZmPiTNEWOCzYvqMPWvKdVE
+Authorization: Bearer {{DriverToken}}
+
+
+# ============================================================
+# 6. PRZYKLADOWY SCENARIUSZ TESTOWY
+# ============================================================
+# 1. Login kierowcy.
+# 2. Skopiuj accessToken
+# 3. Zarejestruj pojazd albo upewnij sie, ze {{LicensePlate}} nalezy do kierowcy.
+# 4. Sprawdz aktualna sesje.
+# 5. Opcjonalnie aktywuj RegistrationBonus.
+# 6. Sprawdz saldo.
+# 7. Doladuj konto.
+# 8. Zaplac przez endpoint kierowcy.
+# 9. Sprawdz saldo ponownie.
+
+
+# ============================================================
+# 7. ADMIN / BRAMKI / KAMERY - POMOCNICZE
+# ============================================================
+# Ta sekcja nie jest czescia wymagan kierowcow, ale pomaga przygotowac dane.
 
 ###
-#aktywacja zniżki
-POST {{WebApi_HostAddress}}/api/drivers/discounts/activate-registration
+# [ADMIN] Lista bramek.
+GET {{WebApi_HostAddress}}/api/gates?page=1&size=10
 Accept: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjkzQTdGRkRELTA1N0YtNDAyMS05QzY4LUZFMDY5NTFGRkE2NSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2VtYWlsYWRkcmVzcyI6Imphbi5rb3dhbHNraUBwYXJraW5nLmxvY2FsIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvZ2l2ZW5uYW1lIjoiSmFuIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvc3VybmFtZSI6Iktvd2Fsc2tpIiwiZGVwYXJ0bWVudCI6IlBhcmtpbmciLCJqdGkiOiJkNmE1YzUxNi1jNWRlLTRmOGYtOTI1OC04MTY5NWI4MGNiMGMiLCJpYXQiOiIxNzgwNjkxODY2IiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiUmVnaXN0ZXJlZFVzZXIiLCJuYmYiOjE3ODA2OTE4NjYsImV4cCI6MTc4MDY5NTQ2NiwiaXNzIjoiUGFya2luZ0FwaUFwcCIsImF1ZCI6IlBhcmtpbmdDbGllbnQifQ.6F7ykY7s4Aj6mNHx8NfbyZmPiTNEWOCzYvqMPWvKdVE
+Authorization: Bearer {{AdminToken}}
 
 ###
-#aktywacja loyalty
-POST {{WebApi_HostAddress}}/api/drivers/discounts/activate-loyalty
+# [ADMIN] Utworzenie bramki.
+POST {{WebApi_HostAddress}}/api/gates
+Content-Type: application/json
+Authorization: Bearer {{AdminToken}}
+
+{
+  "name": "Entry Gate 2",
+  "type": "Entry",
+  "location": "Main Gate"
+}
+
+###
+# [AUTH] Dodanie odczytu kamery do bramki.
+# Podmien gateId na istniejace ID bramki.
+POST {{WebApi_HostAddress}}/api/gates/11111111-aaaa-4444-8888-111111111111/captures
+Content-Type: application/json
+Authorization: Bearer {{DriverToken}}
+
+{
+  "licensePlate": "{{LicensePlate}}",
+  "brand": "BMW",
+  "color": "Black",
+  "imagePath": "images/car1.jpg"
+}
+
+###
+# Lista odczytow kamery dla bramki.
+GET {{WebApi_HostAddress}}/api/gates/11111111-aaaa-4444-8888-111111111111/captures?page=1&size=10
 Accept: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjkzQTdGRkRELTA1N0YtNDAyMS05QzY4LUZFMDY5NTFGRkE2NSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2VtYWlsYWRkcmVzcyI6Imphbi5rb3dhbHNraUBwYXJraW5nLmxvY2FsIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvZ2l2ZW5uYW1lIjoiSmFuIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvc3VybmFtZSI6Iktvd2Fsc2tpIiwiZGVwYXJ0bWVudCI6IlBhcmtpbmciLCJqdGkiOiJkNmE1YzUxNi1jNWRlLTRmOGYtOTI1OC04MTY5NWI4MGNiMGMiLCJpYXQiOiIxNzgwNjkxODY2IiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiUmVnaXN0ZXJlZFVzZXIiLCJuYmYiOjE3ODA2OTE4NjYsImV4cCI6MTc4MDY5NTQ2NiwiaXNzIjoiUGFya2luZ0FwaUFwcCIsImF1ZCI6IlBhcmtpbmdDbGllbnQifQ.6F7ykY7s4Aj6mNHx8NfbyZmPiTNEWOCzYvqMPWvKdVE
+
+
+###
+# [AUTH] Usuniecie odczytu kamery.
+# Podmien gateId i captureId na wartosci z odpowiedzi GET captures.
+DELETE {{WebApi_HostAddress}}/api/gates/11111111-aaaa-4444-8888-111111111111/captures/00000000-0000-0000-0000-000000000000
+Accept: application/json
+Authorization: Bearer {{DriverToken}}
