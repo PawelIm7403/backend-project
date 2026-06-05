@@ -14,10 +14,10 @@ public interface IParkingGateService
     
     Task UpdateOperationalStatus(Guid id, bool isOperational);
     
-    Task<CameraCaptureDto> AddCapture(Guid gateId, CreateCameraCaptureDto dto);
+    Task<CameraCaptureDto> AddCapture(Guid gateId, CreateCameraCaptureDto dto, string userId);
     
     Task<PagedResult<CameraCaptureDto>?> GetCaptures(Guid gateId, int page, int pageSize);
     
-    Task DeleteCapture(Guid gateId, Guid captureId);
+    Task DeleteCapture(Guid gateId, Guid captureId, string userId, bool isAdmin);
 
 }

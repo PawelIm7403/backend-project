@@ -66,7 +66,7 @@ public class ParkingGateService : IParkingGateService
         await _unit.SaveChangesAsync();
     }
     
-    public async Task<CameraCaptureDto> AddCapture(Guid gateId, CreateCameraCaptureDto dto)
+    public async Task<CameraCaptureDto> AddCapture(Guid gateId, CreateCameraCaptureDto dto, string userId)
     {
         var gate = await _unit.Gates.FindByIdAsync(gateId);
 
@@ -81,6 +81,7 @@ public class ParkingGateService : IParkingGateService
         capture.ParkingGateId = gate.Id;
         capture.ParkingGate = gate;
         capture.GateName = gate.Name;
+        capture.CreatedByUserId = userId;
         capture.Type = gate.Type == CoreApp.Enums.GateType.Entry
             ? CoreApp.Enums.CaptureType.Entry
             : CoreApp.Enums.CaptureType.Exit;
@@ -121,7 +122,7 @@ public class ParkingGateService : IParkingGateService
         );
     }
     
-    public async Task DeleteCapture(Guid gateId, Guid captureId)
+    public async Task DeleteCapture(Guid gateId, Guid captureId, string userId, bool isAdmin)
     {
         var gate = await _unit.Gates.FindByIdAsync(gateId);
 
@@ -130,18 +131,19 @@ public class ParkingGateService : IParkingGateService
             throw new GateNotFoundException($"Gate with id={gateId} not found!");
         }
 
-        var capture = gate.CameraCaptures
-            .FirstOrDefault(x => x.Id == captureId);
+        var capture = await _unit.CameraCaptures.FindByIdAsync(captureId);
 
-        if (capture is null)
+        if (capture is null || capture.ParkingGateId != gateId)
         {
             throw new Exception($"Camera capture with id={captureId} not found!");
         }
 
-        gate.CameraCaptures.Remove(capture);
+        if (!isAdmin && capture.CreatedByUserId != userId)
+        {
+            throw new UnauthorizedAccessException("You can delete only your own captures.");
+        }
 
         await _unit.CameraCaptures.RemoveByIdAsync(captureId);
-        await _unit.Gates.UpdateAsync(gate);
         await _unit.SaveChangesAsync();
     }
 }

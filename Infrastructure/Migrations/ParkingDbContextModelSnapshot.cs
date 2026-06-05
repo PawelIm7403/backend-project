@@ -26,6 +26,10 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime>("CapturedAt")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("CreatedByUserId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("DetectedBrand")
                         .IsRequired()
                         .HasMaxLength(50)

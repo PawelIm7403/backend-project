@@ -17,4 +17,6 @@ public class CameraCapture : EntityBase
 
     public Guid ParkingGateId { get; set; }
     public ParkingGate ParkingGate { get; set; }
+    
+    public string CreatedByUserId { get; set; } = string.Empty;
 }   

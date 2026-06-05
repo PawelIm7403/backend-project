@@ -32,6 +32,25 @@ public class ProblemDetailsExceptionHandler(
             return true;
         }
 
+        if (exception is UnauthorizedAccessException)
+        {
+            logger.LogInformation("Exception '{Message}' handled!", exception.Message);
+
+            var problem = factory.CreateProblemDetails(
+                context,
+                StatusCodes.Status403Forbidden,
+                "Forbidden",
+                "Authorization error",
+                detail: exception.Message
+            );
+
+            context.Response.StatusCode = StatusCodes.Status403Forbidden;
+
+            await context.Response.WriteAsJsonAsync(problem, cancellationToken);
+
+            return true;
+        }
+
         return false;
     }
 }

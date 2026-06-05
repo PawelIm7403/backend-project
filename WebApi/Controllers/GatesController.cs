@@ -4,6 +4,9 @@ using CoreApp.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using CoreApp.Authorization;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
+using CoreApp.Enums;
+
 
 namespace WebApi.Controllers;
 
@@ -50,11 +53,19 @@ public class GatesController : ControllerBase
     }
 
     [HttpPost("{gateId:guid}/captures")]
+    [Authorize]
     public async Task<IActionResult> AddCameraCapture(
         [FromRoute] Guid gateId,
         [FromBody] CreateCameraCaptureDto dto)
     {
-        var capture = await _service.AddCapture(gateId, dto);
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        if (userId is null)
+        {
+            return Unauthorized();
+        }
+        
+        var capture = await _service.AddCapture(gateId, dto, userId);
 
         return CreatedAtAction(
             nameof(GetCaptures),
@@ -75,11 +86,21 @@ public class GatesController : ControllerBase
     }
     
     [HttpDelete("{gateId:guid}/captures/{captureId:guid}")]
+    [Authorize]
     public async Task<IActionResult> DeleteCameraCapture(
         [FromRoute] Guid gateId,
         [FromRoute] Guid captureId)
     {
-        await _service.DeleteCapture(gateId, captureId);
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        if (userId is null)
+        {
+            return Unauthorized();
+        }
+
+        var isAdmin = User.IsInRole(UserRole.Administrator.ToString());
+
+        await _service.DeleteCapture(gateId, captureId, userId, isAdmin);
 
         return NoContent();
     }
