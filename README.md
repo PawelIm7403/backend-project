@@ -212,4 +212,4 @@ dotnet run
 
 Paweł Imiołek
 
-Projekt wykonany w ramach zajęć z programowania aplikacji internetowych oraz technologii ASP.NET Core.
+github: https://github.com/PawelIm7403/backend-project
