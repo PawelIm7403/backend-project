@@ -7,6 +7,12 @@ public interface IParkingUnitOfWork
     IParkingSessionRepository Sessions { get; }
     
     ICameraCaptureRepository CameraCaptures { get; }
+    
+    IDriverVehicleRepository DriverVehicles { get; }
+    
+    IDriverAccountRepository DriverAccounts { get; }
+    
+    IDriverDiscountRepository DriverDiscounts { get; }
 
     Task<int> SaveChangesAsync();
     Task BeginTransactionAsync();

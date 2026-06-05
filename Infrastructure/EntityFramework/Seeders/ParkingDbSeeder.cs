@@ -25,6 +25,7 @@ public class ParkingDbSeeder : IDataSeeder
     {
         await SeedGatesAsync();
         await SeedTariffsAsync();
+        await SeedActiveSessionAsync();
     }
 
     private async Task SeedGatesAsync()
@@ -85,6 +86,73 @@ public class ParkingDbSeeder : IDataSeeder
                 IsActive = false
             }
         );
+
+        await _context.SaveChangesAsync();
+    }
+    
+    private async Task SeedActiveSessionAsync()
+    {
+        var licensePlate = "KR12345";
+
+        var vehicle = await _context.Vehicles
+            .FirstOrDefaultAsync(v => v.LicensePlate == licensePlate);
+
+        if (vehicle is null)
+        {
+            vehicle = new Vehicle
+            {
+                Id = Guid.Parse("55555555-EEEE-4444-8888-555555555555"),
+                LicensePlate = licensePlate,
+                Brand = "BMW",
+                Color = "Black"
+            };
+
+            _context.Vehicles.Add(vehicle);
+        }
+
+        var gate = await _context.ParkingGates
+            .FirstOrDefaultAsync(g => g.Type == GateType.Entry);
+
+        var tariff = await _context.ParkingTariffs
+            .FirstOrDefaultAsync(t => t.IsActive);
+
+        if (gate is null || tariff is null)
+        {
+            return;
+        }
+
+        var activeSession = await _context.ParkingSessions
+            .FirstOrDefaultAsync(s => s.VehicleId == vehicle.Id && s.IsActive);
+
+        if (activeSession is not null)
+        {
+            activeSession.EntryTime = DateTime.UtcNow.AddMinutes(-30);
+            activeSession.ExitTime = null;
+            activeSession.ParkingFee = 10m;
+            activeSession.IsPaid = false;
+
+            await _context.SaveChangesAsync();
+            return;
+        }
+
+        var session = new ParkingSession
+        {
+            Id = Guid.Parse("66666666-FFFF-4444-8888-666666666666"),
+            VehicleId = vehicle.Id,
+            Vehicle = vehicle,
+            GateName = gate.Name,
+            EntryTime = DateTime.UtcNow.AddMinutes(-30),
+            ExitTime = null,
+            ParkingFee = 10m,
+            IsPaid = false,
+            IsActive = true,
+            ParkingGateId = gate.Id,
+            ParkingGate = gate,
+            ParkingTariffId = tariff.Id,
+            ParkingTariff = tariff
+        };
+
+        _context.ParkingSessions.Add(session);
 
         await _context.SaveChangesAsync();
     }

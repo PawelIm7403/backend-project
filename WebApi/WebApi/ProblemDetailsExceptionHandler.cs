@@ -13,7 +13,7 @@ public class ProblemDetailsExceptionHandler(
         Exception exception,
         CancellationToken cancellationToken)
     {
-        if (exception is GateNotFoundException)
+        if (exception is GateNotFoundException or BusinessRuleException)
         {
             logger.LogInformation("Exception '{Message}' handled!", exception.Message);
 
@@ -50,7 +50,28 @@ public class ProblemDetailsExceptionHandler(
 
             return true;
         }
+        
+        if (exception is InvalidOperationException)
+        {
+            var problem = factory.CreateProblemDetails(
+                context,
+                StatusCodes.Status400BadRequest,
+                "Invalid operation",
+                "Business rule error",
+                detail: exception.Message
+            );
 
+            context.Response.StatusCode = StatusCodes.Status400BadRequest;
+
+            await context.Response.WriteAsJsonAsync(problem, cancellationToken);
+
+            return true;
+        }
+        
         return false;
+        
+        
     }
+    
+    
 }

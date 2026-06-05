@@ -8,7 +8,10 @@ public class EfParkingUnitOfWork(
     IParkingGateRepository gates,
     IParkingSessionRepository sessions,
     ICameraCaptureRepository cameraCaptures,
-    ParkingDbContext context
+    ParkingDbContext context,
+    IDriverVehicleRepository driverVehicles,
+    IDriverAccountRepository driverAccounts,
+    IDriverDiscountRepository driverDiscounts
 ) : IParkingUnitOfWork, IAsyncDisposable
 {
     public IVehicleRepository Vehicles => vehicles;
@@ -18,6 +21,12 @@ public class EfParkingUnitOfWork(
     public IParkingSessionRepository Sessions => sessions;
 
     public ICameraCaptureRepository CameraCaptures => cameraCaptures;
+    
+    public IDriverVehicleRepository DriverVehicles => driverVehicles;
+    
+    public IDriverAccountRepository DriverAccounts => driverAccounts;
+    
+    public IDriverDiscountRepository DriverDiscounts => driverDiscounts;
 
     public ValueTask DisposeAsync()
     {

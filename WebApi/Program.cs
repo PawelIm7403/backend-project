@@ -6,6 +6,9 @@ using WebApi.WebApi;
 using Infrastructure.EntityFramework;
 using Infrastructure.Security;
 using Infrastructure.EntityFramework.Seeders;
+using Infrastructure.EntityFramework.Context;
+using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 
 namespace WebApi;
 
@@ -17,7 +20,11 @@ public class Program
         builder.Services.AddAuthorization();
         builder.Services.AddCoreAppModule(builder.Configuration); // Moduł z walidatorami
         
-        builder.Services.AddControllers(); // kontrolery REST
+        builder.Services.AddControllers()
+            .AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+            }); // kontrolery REST
         
         builder.Services.AddOpenApi(); // OpenAPI
         
@@ -54,6 +61,11 @@ public class Program
             app.MapOpenApi();
 
             using var scope = app.Services.CreateScope();
+
+            var dbContext = scope.ServiceProvider
+                .GetRequiredService<ParkingDbContext>();
+
+            await dbContext.Database.MigrateAsync();
 
             var seeders = scope.ServiceProvider
                 .GetServices<IDataSeeder>()

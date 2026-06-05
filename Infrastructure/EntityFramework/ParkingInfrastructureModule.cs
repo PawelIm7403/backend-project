@@ -55,7 +55,14 @@ public static class ParkingInfrastructureModule
         
         services.AddScoped<IDataSeeder, IdentityDbSeeder>();
         services.AddScoped<IDataSeeder, ParkingDbSeeder>();
-
+        
+        services.AddScoped<IDriverVehicleRepository, EfDriverVehicleRepository>();
+        services.AddScoped<IDriverService, DriverService>();
+        
+        services.AddScoped<IDriverAccountRepository, EfDriverAccountRepository>();
+        
+        services.AddScoped<IDriverDiscountRepository, EfDriverDiscountRepository>();
+        
         return services;
         
     }
@@ -71,6 +78,9 @@ public static class ParkingInfrastructureModule
         services.AddSingleton<IParkingUnitOfWork, MemoryParkingUnitOfWork>();
 
         services.AddSingleton<IParkingGateService, ParkingGateService>();
+        
+        services.AddSingleton<IDriverVehicleRepository, MemoryDriverVehicleRepository>();
+        services.AddSingleton<IDriverService, DriverService>();
 
         return services;
     }

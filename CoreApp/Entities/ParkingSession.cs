@@ -11,7 +11,9 @@ public class ParkingSession : EntityBase
     public DateTime? ExitTime { get; set; }
 
     public decimal? ParkingFee { get; set; }
-
+    
+    public bool IsPaid { get; set; }
+    
     public bool IsActive { get; set; }
 
     public Guid ParkingGateId { get; set; }
@@ -19,4 +21,6 @@ public class ParkingSession : EntityBase
 
     public Guid ParkingTariffId { get; set; }
     public ParkingTariff ParkingTariff { get; set; }
+    
+    
 }

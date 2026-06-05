@@ -17,6 +17,12 @@ public class ParkingDbContext : IdentityDbContext<AppUser, AppRole, string>
     public DbSet<CameraCapture> CameraCaptures { get; set; }
     
     public DbSet<RefreshToken> RefreshTokens { get; set; }
+    
+    public DbSet<DriverVehicle> DriverVehicles { get; set; }
+    
+    public DbSet<DriverAccount> DriverAccounts { get; set; }
+    
+    public DbSet<DriverDiscount> DriverDiscounts { get; set; }
 
     public ParkingDbContext()
     {
@@ -106,6 +112,12 @@ public class ParkingDbContext : IdentityDbContext<AppUser, AppRole, string>
             entity.HasOne(c => c.ParkingGate)
                 .WithMany(g => g.CameraCaptures)
                 .HasForeignKey(c => c.ParkingGateId);
+        });
+        
+        builder.Entity<DriverDiscount>(entity =>
+        {
+            entity.Property(d => d.Type).HasConversion<string>();
+            entity.Property(d => d.PercentageDiscount).HasColumnType("decimal(5,2)");
         });
     }
 }

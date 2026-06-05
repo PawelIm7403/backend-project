@@ -6,7 +6,10 @@ public class MemoryParkingUnitOfWork(
     IVehicleRepository vehicles,
     IParkingSessionRepository sessions,
     IParkingGateRepository gates,
-    ICameraCaptureRepository cameraCaptures
+    ICameraCaptureRepository cameraCaptures,
+    IDriverVehicleRepository driverVehicles,
+    IDriverAccountRepository driverAccounts,
+    IDriverDiscountRepository driverDiscounts
     // pozostałe repozytoria
 ): IParkingUnitOfWork
 {
@@ -14,6 +17,12 @@ public class MemoryParkingUnitOfWork(
     public IParkingGateRepository Gates => gates;
     public IParkingSessionRepository Sessions => sessions;
     public ICameraCaptureRepository CameraCaptures => cameraCaptures;
+    
+    public IDriverVehicleRepository DriverVehicles => driverVehicles;
+    
+    public IDriverAccountRepository DriverAccounts => driverAccounts;
+    
+    public IDriverDiscountRepository DriverDiscounts => driverDiscounts;
     // pozostałe repozytoria
     
     public Task<int> SaveChangesAsync()
