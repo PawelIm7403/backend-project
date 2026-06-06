@@ -208,6 +208,13 @@ W katalogu WebApi:
 dotnet run
 ```
 
+## Uruchomienie Testów
+
+W głównym katalogu projektu:
+```bash
+dotnet test
+```
+
 # Autor
 
 Paweł Imiołek
