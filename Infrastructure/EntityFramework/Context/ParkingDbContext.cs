@@ -35,7 +35,10 @@ public class ParkingDbContext : IdentityDbContext<AppUser, AppRole, string>
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlite("Data Source=parking.db");
+        if (!optionsBuilder.IsConfigured)
+        {
+            optionsBuilder.UseSqlite("Data Source=parking.db");
+        }
     }
 
     protected override void OnModelCreating(ModelBuilder builder)

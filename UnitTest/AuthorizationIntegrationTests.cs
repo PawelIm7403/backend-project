@@ -1,5 +1,4 @@
 ﻿using System.Net;
-using Microsoft.AspNetCore.Mvc.Testing;
 using WebApi;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
@@ -10,12 +9,12 @@ using CoreApp.Dto;
 namespace UnitTest;
 
 public class AuthorizationIntegrationTests
-    : IClassFixture<WebApplicationFactory<Program>>
+    : IClassFixture<TestWebApplicationFactory>
 {
     private readonly HttpClient _client;
 
     public AuthorizationIntegrationTests(
-        WebApplicationFactory<Program> factory)
+        TestWebApplicationFactory factory)
     {
         _client = factory.CreateClient();
     }
@@ -23,9 +22,11 @@ public class AuthorizationIntegrationTests
     [Fact]
     public async Task GetAccount_ShouldReturn401_WhenTokenIsMissing()
     {
+        // Proba wejscia na endpoint kierowcy bez tokenu JWT.
         var response =
             await _client.GetAsync("/api/drivers/account");
 
+        // Endpoint powinien odrzucic uzytkownika niezalogowanego.
         Assert.Equal(
             HttpStatusCode.Unauthorized,
             response.StatusCode);
